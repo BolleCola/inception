@@ -1,41 +1,59 @@
 version: "3.9"
-#https://www.data-transitionnumerique.com/docker-volume/
+
 services:
 	db:
-		image: mariadb
+		build: 
+			context: /requierments/mariadb
+		conatainer_name: mariadb
 		restart: always
+		env_files: .env
+		environment:
+			MYSQL_DATABASE: ${MDB_DATABASE}
+			MYSQL_ROOT_PASSWORD: ${MDB_ROOT_PASSWORD}
+			MYSQL_USER: ${MDB_USER}
+			MYSQL_PASSWORD: ${MDB_PASSWORD}
+		volumes:
+		 - 
 		ports:
 		 - "3306:3306"
-		environment:
-		MARIADB_ROOT_PASSWORD: #inserer le password ici
 		networks:
 		 - 42networks
 
 	wordpress:
-    image: wordpress
-    restart: always
-    ports:
-      - "9000:9000"
+    build: 
+			context: /requierments/wordpress
+		container_name: wordpress
+		depends_on:
+			- db
+    restart: always      
+		env_files: .env
     environment:
-      WORDPRESS_DB_HOST: db
-      WORDPRESS_DB_USER: exampleuser
-      WORDPRESS_DB_PASSWORD: examplepass
-      WORDPRESS_DB_NAME: exampledb
+			WORDPRESS_DB_NAME: ${MDB_DATABASE}
+			WORDPRESS_DB_ROOT_PASSWORD: ${MDB_ROOT_PASSWORD}
+      WORDPRESS_DB_USER: ${MDB_USER}
+      WORDPRESS_DB_PASSWORD: ${MDB_PASSWORD}
     volumes:
       - wordpress:/var/www/html
+		ports:
+		 - "9000:9000"
 		networks:
 		 - 42networks
 
 	web:
-		image: nginx
+		build: 
+			context: /requierments/nginx
+		container_name: nginx
+		depends_on:
+			- wordpress
 		restart: always
+		env_files: .env
+		environment:
+			NGINX_HOST: ${DOMAIN_NAME}
+			NGINX_PORT: ${PORTS_WEB}
 		volumes:
-		- ./templates:/etc/nginx/templates
+		- wordpress:/var/www/html
 		ports:
 		- "443:443"
-		environment:
-		- NGINX_HOST=foobar.com
-		- NGINX_PORT=80
 		networks:
 		 - 42networks
 
@@ -44,4 +62,6 @@ networks:
 
 volume:
 	db:
+		external: true
 	wordpress:
+		

@@ -64,4 +64,3 @@ volume:
 	db:
 		external: true
 	wordpress:
-		

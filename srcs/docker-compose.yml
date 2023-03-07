@@ -1,62 +1,45 @@
 version: "3.9"
 
 services:
- db:
+
+db:
  build: 
-  context: /requierments/mariadb
-  dockerfile: Dockerfile
+  context: ./requierments/mariadb
  conatainer_name: mariadb
  restart: always
  env_files: .env
- environment:
-  MYSQL_DATABASE: ${MDB_DATABASE}
-  MYSQL_ROOT_PASSWORD: ${MDB_ROOT_PASSWORD}
-  MYSQL_USER: ${MDB_USER}
-  MYSQL_PASSWORD: ${MDB_PASSWORD}
  volumes:
   - 
- ports:
-  - "3306:3306"
+  -
  networks:
   - 42networks
 
 wordpress:
  build: 
-  context: /requierments/wordpress
-  dockerfile: Dockerfile
+  context: ./requierments/wordpress
+  args: tpaquier.42.fr
  container_name: wordpress
  depends_on:
   - db
  restart: always
  env_files: .env
- environment:
-  WORDPRESS_DB_NAME: ${MDB_DATABASE}
-  WORDPRESS_DB_ROOT_PASSWORD: ${MDB_ROOT_PASSWORD}
-  WORDPRESS_DB_USER: ${MDB_USER}
-  WORDPRESS_DB_PASSWORD: ${MDB_PASSWORD}
  volumes:
   - wordpress:/var/www/html
- ports:
-  - "9000:9000"
+  - 
  networks:
   - 42networks
 
 web:
  build: 
-  context: /requierments/nginx
-  dockerfile: Dockerfile
+  context: ./requierments/nginx
+  args: tpaquier.42.fr
  container_name: nginx
  depends_on:
   - wordpress
  restart: always
  env_files: .env
- environment:
-  NGINX_HOST: ${DOMAIN_NAME}
-  NGINX_PORT: ${PORTS_WEB}
  volumes:
   - wordpress:/var/www/html
- ports:
-  - "443:443"
  networks:
   - 42networks
 
@@ -64,6 +47,17 @@ networks:
  42networks:
 
 volume:
+
  db:
-  external: true
+  driver:
+  driver_opts:
+   type:
+   O:
+   device:
+
  wordpress:
+  driver:
+  driver_opts:
+   type:
+   O:
+   device:

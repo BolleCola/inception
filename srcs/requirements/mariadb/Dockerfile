@@ -1,6 +1,6 @@
 FROM alpine:3.14
 
 RUN sudo apk update
-RUN sudo apk mysql mysql-client
+RUN sudo apk mariadb mariadb-client
 
 EXPOSE 3306

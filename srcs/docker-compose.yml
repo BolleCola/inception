@@ -9,8 +9,11 @@ db:
  restart: always
  env_files: .env
  volumes:
-  - 
-  -
+  - /tmp/db-wordpress:/var/www/html
+#  - 
+ MYSQL_ROOT_PASSWORD: password
+ ports:
+   - "3306:3306"
  networks:
   - 42networks
 
@@ -25,7 +28,9 @@ wordpress:
  env_files: .env
  volumes:
   - wordpress:/var/www/html
-  - 
+  - /tmp/db-wordpress:/var/www/html
+ WORDPRESS_DB_HOST: db:3306
+ WORDPRESS_DB_PASSWORD: password
  networks:
   - 42networks
 

@@ -6,45 +6,48 @@ db:
  build: 
   context: ./requierments/mariadb
  conatainer_name: mariadb
- restart: always
+ restart: on-failure
+ environement:
+ # all les db var
  env_files: .env
  volumes:
   - /tmp/db-wordpress:/var/www/html
 #  - 
- MYSQL_ROOT_PASSWORD: password
  ports:
    - "3306:3306"
- networks:
-  - 42networks
-
-wordpress:
- build: 
-  context: ./requierments/wordpress
-  args: tpaquier.42.fr
- container_name: wordpress
- depends_on:
-  - db
- restart: always
- env_files: .env
- volumes:
-  - wordpress:/var/www/html
-  - /tmp/db-wordpress:/var/www/html
- WORDPRESS_DB_HOST: db:3306
- WORDPRESS_DB_PASSWORD: password
  networks:
   - 42networks
 
 web:
  build: 
   context: ./requierments/nginx
-  args: tpaquier.42.fr
  container_name: nginx
  depends_on:
-  - wordpress
- restart: always
+  - wordpress.
+ environement:
+  - NGINX_HOST=tpaquier.42.fr
+ restart: on-failure
  env_files: .env
  volumes:
   - wordpress:/var/www/html
+ networks:
+  - 42networks
+
+wordpress:
+ build: 
+  context: ./requierments/wordpress
+ container_name: wordpress
+ depends_on:
+  - db
+ restart: on-failure
+ environement:
+ # all wp env meme que la db
+ env_files: .env
+ volumes:
+  - wordpress:/var/www/html
+  - /tmp/db-wordpress:/var/www/html
+ WORDPRESS_DB_HOST: db:3306
+ WORDPRESS_DB_PASSWORD: password
  networks:
   - 42networks
 

@@ -41,13 +41,13 @@ wordpress:
   - db
  restart: on-failure
  environement:
+  WORDPRESS_DB_HOST: db:3306
+  WORDPRESS_DB_PASSWORD: password
  # all wp env meme que la db
  env_files: .env
  volumes:
   - wordpress:/var/www/html
   - /tmp/db-wordpress:/var/www/html
- WORDPRESS_DB_HOST: db:3306
- WORDPRESS_DB_PASSWORD: password
  networks:
   - 42networks
 

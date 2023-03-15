@@ -8,7 +8,9 @@ db:
  conatainer_name: mariadb
  restart: on-failure
  environement:
- # all les db var
+  MARIADB_ROOT_PASSWORD: ...
+  MARIADB_ROOT_HOST: ...
+  MARIADB_DATABASE: ...
  env_files: .env
  volumes:
   - /tmp/db-wordpress:/var/www/html
@@ -43,6 +45,9 @@ wordpress:
  environement:
   WORDPRESS_DB_HOST: db:3306
   WORDPRESS_DB_PASSWORD: password
+  WORDPRESS_DB_USER: ...
+  WORDPRESS_DB_NAME: ...
+  WORDPRESS_TABLE_PREFIX: ...
  # all wp env meme que la db
  env_files: .env
  volumes:

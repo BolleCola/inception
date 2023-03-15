@@ -1,7 +1,5 @@
 FROM alpine:3.14
 
-LABEL "tpaquier.42.fr"="tpaquier inception"
-
 RUN apk update
 RUN apk add nginx openssl vim
 

@@ -13,8 +13,8 @@ db:
   MARIADB_DATABASE: ...
  env_files: .env
  volumes:
-  - /tmp/db-wordpress:/var/www/html
-#  - 
+  - /tmp/db-wordpress:/var/www/html #bind mount /home/usr/data comme dans le sujet
+# - 
  ports:
    - "3306:3306"
  networks:
@@ -52,7 +52,6 @@ wordpress:
  env_files: .env
  volumes:
   - wordpress:/var/www/html
-  - /tmp/db-wordpress:/var/www/html
  networks:
   - 42networks
 

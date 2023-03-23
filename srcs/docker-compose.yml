@@ -8,13 +8,13 @@ db:
  conatainer_name: mariadb
  restart: on-failure
  environement:
-  MARIADB_ROOT_PASSWORD: ...
-  MARIADB_ROOT_HOST: ...
-  MARIADB_DATABASE: ...
+  MARIADB_ROOT_PASSWORD: ${MDB_ROOT_PASSWORD}
+  MARIADB_USER: ${MDB_USER}
+  MARIADB_PASSWORD: ${MDB_PASSWORD}
+  MARIADB_DATABASE: ${MDB_DATABASE}
  env_files: .env
  volumes:
-  - /tmp/db-wordpress:/var/www/html #bind mount /home/usr/data comme dans le sujet
-# - 
+  - dbdata:/var/www/html
  ports:
    - "3306:3306"
  networks:
@@ -27,7 +27,7 @@ web:
  depends_on:
   - wordpress.
  environement:
-  - NGINX_HOST=tpaquier.42.fr
+  - NGINX_HOST=${DOMAIN_NAME}
  restart: on-failure
  env_files: .env
  volumes:
@@ -44,11 +44,9 @@ wordpress:
  restart: on-failure
  environement:
   WORDPRESS_DB_HOST: db:3306
-  WORDPRESS_DB_PASSWORD: password
-  WORDPRESS_DB_USER: ...
-  WORDPRESS_DB_NAME: ...
-  WORDPRESS_TABLE_PREFIX: ...
- # all wp env meme que la db
+  WORDPRESS_DB_PASSWORD: ${MDB_PASSWORD}
+  WORDPRESS_DB_USER: ${MDB_USER}
+  WORDPRESS_DB_NAME: ${MDB_DATABASE}
  env_files: .env
  volumes:
   - wordpress:/var/www/html
@@ -60,16 +58,16 @@ networks:
 
 volume:
 
- db:
-  driver:
+ dbdata:
+  driver: local
   driver_opts:
-   type:
-   O:
-   device:
+   type: none
+   o: "bind"
+   device: "/home/tpaquier/data"
 
  wordpress:
-  driver:
+  driver: local
   driver_opts:
-   type:
-   O:
-   device:
+   type: none
+   o: "bind"
+   device: "/home/wordpress"

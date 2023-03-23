@@ -8,6 +8,4 @@ COPY wp-cli.phar /tmp/wordpress/wp-cli.phar
 RUN chmod +x /tmp/wordpress/wp-cli.phar
 RUN mv /tmp/wordpress/wp-cli.phar /usr/bin/wp
 
-EXPOSE 9000
-
 CMD ["sh", "bash"]

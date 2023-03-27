@@ -1,40 +1,38 @@
 version: "3.9"
-
 services:
-
   db:
     build: 
       context: ./requierments/mariadb
-    conatainer_name: mariadb
+    container_name: mariadb
     restart: on-failure
-    env_files: .env
+    env_file: .env
     environement:
       MARIADB_ROOT_PASSWORD: ${MDB_ROOT_PASSWORD}
       MARIADB_USER: ${MDB_USER}
       MARIADB_PASSWORD: ${MDB_PASSWORD}
       MARIADB_DATABASE: ${MDB_DATABASE}
     volumes:
-      - dbdata:/var/www/html
-    ports:
-      - "3306:3306"
+      - dbdata:/var/lib/mysql
+    expose:
+      - "3306"
     networks:
       - 42networks
-
   web:
     build: 
       context: ./requierments/nginx
     container_name: nginx
     depends_on:
       - wordpress.
-    env_files: .env
+    env_file: .env
+    ports:
+      - 443:443
     environement:
       - NGINX_HOST=${DOMAIN_NAME}
     restart: on-failure
     volumes:
-      - wordpress:/var/www/html
+      - wpdata:/var/www/html
     networks:
       - 42networks
-
   wordpress:
     build: 
       context: ./requierments/wordpress
@@ -42,32 +40,29 @@ services:
     depends_on:
       - db
     restart: on-failure
-    env_files: .env
+    env_file: .env
     environement:
       WORDPRESS_DB_HOST: db:3306
       WORDPRESS_DB_PASSWORD: ${MDB_PASSWORD}
       WORDPRESS_DB_USER: ${MDB_USER}
       WORDPRESS_DB_NAME: ${MDB_DATABASE}
     volumes:
-      - wordpress:/var/www/html
+      - wpdata:/var/www/html
+      - dbdata:/var/www/html
     networks:
       - 42networks
-
   networks:
     42networks:
-
   volume:
-
     dbdata:
       driver: local
       driver_opts:
-      type: none
-      o: "bind"
-      device: "/home/tpaquier/data"
-
-    wordpress:
+        type: none
+        o: "bind"
+        device: "/home/tpaquier/data"
+    wpdata:
       driver: local
       driver_opts:
-      type: none
-      o: "bind"
-      device: "/home/wordpress"
+        type: none
+        o: "bind"
+        device: "/home/wordpress"

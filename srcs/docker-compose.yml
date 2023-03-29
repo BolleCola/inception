@@ -6,7 +6,7 @@ services:
     build: 
       context: ./requirements/mariadb
     container_name: mariadb
-    restart: on-failure
+    restart: on-failure:10
     env_file: .env
     environment:
       MARIADB_ROOT_PASSWORD: ${MDB_ROOT_PASSWORD}
@@ -15,8 +15,6 @@ services:
       MARIADB_DATABASE: ${MDB_DATABASE}
     volumes:
       - dbdata:/var/lib/mysql
-    expose:
-      - "3306"
     networks:
       - 42networks
   
@@ -25,13 +23,16 @@ services:
       context: ./requirements/nginx
     container_name: nginx
     depends_on:
-      - wordpress
+      wordpress:
+        condition: service_started
+      db:
+        condition: service_started
     env_file: .env
     ports:
       - 443:443
     environment:
       - NGINX_HOST=${DOMAIN_NAME}
-    restart: on-failure
+    restart: on-failure:10
     volumes:
       - wpdata:/var/www/html
     networks:
@@ -42,8 +43,9 @@ services:
       context: ./requirements/wordpress
     container_name: wordpress
     depends_on:
-      - db
-    restart: on-failure
+      db:
+        condition: service_started
+    restart: on-failure:10
     env_file: .env
     environment:
       WORDPRESS_DB_HOST: db:3306
@@ -52,7 +54,6 @@ services:
       WORDPRESS_DB_NAME: ${MDB_DATABASE}
     volumes:
       - wpdata:/var/www/html
-      - dbdata:/var/www/html
     networks:
       - 42networks
   
@@ -63,12 +64,12 @@ volumes:
   dbdata:
     driver: local
     driver_opts:
-      type: none
+      type: "none"
       o: "bind"
-      device: "/data"
+      device: "/home/tpaquier/42/inception/srcs/data"
   wpdata:
     driver: local
     driver_opts:
-      type: none
+      type: "none"
       o: "bind"
-      device: "/wordpress"
+      device: "/home/tpaquier/42/inception/srcs/wordpress"

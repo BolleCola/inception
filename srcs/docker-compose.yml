@@ -66,10 +66,10 @@ volumes:
     driver_opts:
       type: "none"
       o: "bind"
-      device: "./home/tpaquier/42/inception/srcs/data"
+      device: "/Users/tpaquier/Cursus_42/inception/data"
   wpdata:
     driver: local
     driver_opts:
       type: "none"
       o: "bind"
-      device: "./home/tpaquier/42/inception/srcs/wordpress"
+      device: "/Users/tpaquier/Cursus_42/inception/wordpress"

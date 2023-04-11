@@ -3,7 +3,7 @@ FROM alpine:3.14
 RUN apk update
 RUN apk add nginx openssl vim
 
-COPY /conf/nginx.conf /var/nginx/nginx.conf
+COPY ./conf/nginx.conf /var/nginx/nginx.conf
 
 RUN mkdir /etc/nginx/key/
 

@@ -1,20 +1,20 @@
 # get wordpress et get wp-cli
 
-while [!mysqladmin ping -h "db"]; do
+while ! mysql -h mariadb -u $MDB_USER -p$MDB_PASSWORD $MDB_DATABASE; do
     sleep 1
 done
 
 wp core download --path=/home/wordpress --locale=fr_FR
 
 #check si le folder wordpress est install
-while [! -f "wp-config-sample.php"]; do
+while [ ! -f "wp-config-sample.php" ]; do
     sleep 1
 done
 cd #into le path du download
 wp config create --dbname=${MDB_DATABASE} --dbuser=${MDB_USER} --dbpass=${MDB_PASSWORD}
 
 # attendre wp-config.php qui est cree donc cheker si bien cree
-while [! -f "wp-config.php"]; do
+while [ ! -f "wp-config.php" ]; do
     sleep 1
 done
 

@@ -1,7 +1,14 @@
-CREATE DATABASE IF NOT EXIST mariadb;
+mariadb-install-db --user=mysql --basedir=/opt/mysql/mysql --datadir=/var/lib/mysql --auth-root-authentication-method=normal
 
-SET PASSWORD FOR 'root'@'localhost' =PASSWORD(${MDB_ROOT_PASSWORD});
-CREATE USER ${MDB_USER}@localhost IDENTIFIED BY ${MDB_PASSWORD};
-GRANT ALL PRIVILEGES ON ${MDB_DATABASE}.* TO ${MDB_USER}@localhost;
+chown -R mysql:mysql /var/lib/mysql
+chown -R mysql:mysql /opt/mysql/mysql
 
-FLUSH PRIVILEGES;
+mysqld --datatdir=/var/lib/mysql & #tache de fond
+
+while ! mysqladmin ping -h "mariadb" --silent; do
+    sleep 1
+done
+
+eval "echo \"$(cat /dbase.sql)\"" | mariadb
+
+mysqld_safe --datadir=/var/lib/mysql

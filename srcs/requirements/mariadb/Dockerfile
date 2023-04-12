@@ -3,8 +3,13 @@ FROM alpine:3.14
 RUN apk update
 RUN apk add bash vim mariadb mariadb-client
 
+COPY /conf/dbase.sql /
+RUN chmod -x /dbase.sql
+
 COPY /conf/database.sh /
 RUN chmod -x /database.sh
+
+RUN mkdir -p /opt/mysql/mysql
 
 EXPOSE 3306
 

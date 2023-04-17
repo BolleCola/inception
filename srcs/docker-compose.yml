@@ -64,12 +64,13 @@ volumes:
   dbdata:
     driver: local
     driver_opts:
+
       type: "none"
       o: "bind"
-      device: "/Users/tpaquier/Cursus_42/inception/data"
+      device: "/home/tpaquier/42/inception/data"
   wpdata:
     driver: local
     driver_opts:
       type: "none"
       o: "bind"
-      device: "/Users/tpaquier/Cursus_42/inception/wordpress"
+      device: "/home/tpaquier/42/inception/wordpress"

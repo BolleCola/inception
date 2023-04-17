@@ -9,7 +9,7 @@ RUN chmod -x /dbase.sql
 COPY /conf/database.sh /
 RUN chmod -x /database.sh
 
-RUN mkdir -p /opt/mysql/mysql
+RUN mkdir -p /var/lib/mysqld /run/mysqld
 
 EXPOSE 3306
 

@@ -17,7 +17,7 @@ services:
       - dbdata:/var/lib/mysql
     networks:
       - 42networks
-  
+
   web:
     build: 
       context: ./requirements/nginx

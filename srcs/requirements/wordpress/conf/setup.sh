@@ -1,6 +1,6 @@
 # get wordpress et get wp-cli
 
-while ! mysql -h mariadb -u $MDB_USER -p$MDB_PASSWORD $MDB_DATABASE; do
+while ! mysqladmin ping -h "db" --silent; do
     sleep 1
 done
 

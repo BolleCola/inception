@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   
-  db:
+  mariadb:
     build: 
       context: ./requirements/mariadb
     container_name: mariadb
@@ -18,20 +18,21 @@ services:
     networks:
       - 42networks
 
-  web:
+  nginx:
     build: 
       context: ./requirements/nginx
     container_name: nginx
     depends_on:
       wordpress:
         condition: service_started
-      db:
+      mariadb:
         condition: service_started
     env_file: .env
     ports:
       - 443:443
     environment:
       - NGINX_HOST=${DOMAIN_NAME}
+      - NGINX_PORT=${PORTS_WEB}
     restart: on-failure:10
     volumes:
       - wpdata:/var/www/html
@@ -43,7 +44,7 @@ services:
       context: ./requirements/wordpress
     container_name: wordpress
     depends_on:
-      db:
+      mariadb:
         condition: service_started
     restart: on-failure:10
     env_file: .env
@@ -64,13 +65,12 @@ volumes:
   dbdata:
     driver: local
     driver_opts:
-
       type: "none"
       o: "bind"
-      device: "/Users/tpaquier/Cursus_42/inception/data"
+      device: "/home/tpaquier/data/data"
   wpdata:
     driver: local
     driver_opts:
       type: "none"
       o: "bind"
-      device: "/Users/tpaquier/Cursus_42/inception/wordpress"
+      device: "/home/tpaquier/data/wordpress"

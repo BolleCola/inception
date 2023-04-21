@@ -22,8 +22,8 @@ up:
 
 build:
 	@echo "${GREEN}Building containers...${RESET}"
-	@mkdir -p ./data
-	@mkdir -p ./wordpress
+	@mkdir -p /home/tpaquier/data/data
+	@mkdir -p /home/tpaquier/data/wordpress
 	@${DOCKER} up -d --build
 
 down:
@@ -45,8 +45,8 @@ restart:
 delete:
 	@echo "${GREEN}Deleting containers...${RESET}"
 	@${DOCKER} down --volumes --remove-orphans
-	@rm -rf ./data
-	@rm -rf ./wordpress
+	@rm -rf /home/tpaquier/data/data
+	@rm -rf /home/tpaquier/data/wordpress
 	
 
 rebuild: delete

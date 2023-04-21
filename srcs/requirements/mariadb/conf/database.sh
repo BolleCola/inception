@@ -8,12 +8,10 @@ else
     chown -R mysql:mysql '/var/lib/mysql'
     chown -R mysql:mysql '/var/lib/mysqld'
     
-    echo "test"
     mysqld_safe --datatdir='/var/lib/mysql' & #tache de fond
-    while ! mysqladmin ping -h "db" --silent; do
+    while ! mysqladmin ping -h "mariadb" --silent; do
         sleep 1
     done
-    echo "test"
     eval "echo \"$(cat /dbase.sql)\"" | mariadb
 fi
 mariadb_safe --datadir='/var/lib/mysql'

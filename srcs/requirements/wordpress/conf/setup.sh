@@ -1,10 +1,10 @@
 # get wordpress et get wp-cli
 
-while ! mysqladmin ping -h "db" --silent; do
+while ! mysqladmin ping -h "mariadb" --silent; do
     sleep 1
 done
 
-wp core download --path=/home/wordpress --locale=fr_FR
+wp core download --path='/home/wordpress' --locale=fr_FR
 
 #check si le folder wordpress est install
 while [ ! -f "wp-config-sample.php" ]; do

@@ -9,4 +9,6 @@ RUN mv wp-cli.phar /usr/local/bin/wp
 
 COPY ./conf/setup.sh setup.sh
 
+EXPOSE 9000
+
 CMD ["/bin/bash", "setup.sh"]

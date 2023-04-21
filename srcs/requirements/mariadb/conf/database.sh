@@ -15,3 +15,5 @@ else
     eval "echo \"$(cat /dbase.sql)\"" | mariadb
 fi
 mariadb_safe --datadir='/var/lib/mysql'
+
+#restart ca bug

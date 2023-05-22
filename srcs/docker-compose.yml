@@ -8,51 +8,40 @@ services:
     container_name: mariadb
     restart: on-failure:10
     env_file: .env
-    environment:
-      MARIADB_ROOT_PASSWORD: ${MDB_ROOT_PASSWORD}
-      MARIADB_USER: ${MDB_USER}
-      MARIADB_PASSWORD: ${MDB_PASSWORD}
-      MARIADB_DATABASE: ${MDB_DATABASE}
     volumes:
       - dbdata:/var/lib/mysql
-    networks:
-      - 42networks
-
-  nginx:
-    build: 
-      context: ./requirements/nginx
-    container_name: nginx
-    depends_on:
-      wordpress:
-        condition: service_started
-      mariadb:
-        condition: service_started
-    env_file: .env
-    ports:
-      - 443:443
-    environment:
-      - NGINX_HOST=${DOMAIN_NAME}
-      - NGINX_PORT=${PORTS_WEB}
-    restart: on-failure:10
-    volumes:
-      - wpdata:/var/www/html
     networks:
       - 42networks
   
   wordpress:
     build: 
       context: ./requirements/wordpress
+      args:
+        DOMAIN_NAME : ${DOMAIN_NAME}
     container_name: wordpress
     depends_on:
       mariadb:
         condition: service_started
     restart: on-failure:10
     env_file: .env
-    environment:
-      WORDPRESS_DB_HOST: db:3306
-      WORDPRESS_DB_PASSWORD: ${MDB_PASSWORD}
-      WORDPRESS_DB_USER: ${MDB_USER}
-      WORDPRESS_DB_NAME: ${MDB_DATABASE}
+    volumes:
+      - wpdata:/var/www/html
+    networks:
+      - 42networks
+
+  nginx:
+    build: 
+      context: ./requirements/nginx
+      args:
+        DOMAIN_NAME: ${DOMAIN_NAME}
+    container_name: nginx
+    depends_on:
+      wordpress:
+        condition: service_started
+    env_file: .env
+    ports:
+      - 443:443
+    restart: on-failure:10
     volumes:
       - wpdata:/var/www/html
     networks:

@@ -3,14 +3,14 @@ FROM alpine:3.14
 RUN apk update
 RUN apk add nginx openssl vim
 
-COPY ./conf/nginx.conf /etc/nginx/conf.d/default.conf
+RUN	mkdir -p /etc/nginx/ssl/private /etc/nginx/ssl/certs
 
-RUN mkdir /etc/nginx/key/
+RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/nginx/ssl/private/mykey.key -out /etc/nginx/ssl/certs/mycrt.crt \
+      -subj "/C=CH/ST=Geneva/L=Geneva/O=42/OU=42/CN=$DOMAIN"
 
-RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/nginx/key/mykey.key -out /etc/nginx/key/mycrt.crt \
-      -subj "/C=CH/ST=Geneva/L=Geneva/O=tpaquier/OU=42/CN=tpaquier.42.fr"
-    
-WORKDIR /var/www/html
+RUN mkdir -p /var/run/nginx
+
+COPY ./conf/nginx.conf /etc/nginx/conf.d/default.conf 
 
 EXPOSE 443
 

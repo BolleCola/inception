@@ -14,4 +14,4 @@ RUN chmod +x /database.sh
 COPY /conf/my.cnf /etc/my.cnf
 RUN chmod +x /etc/my.cnf
 
-ENTRYPOINT ["/bin/sh", "/database.sh"]
+ENTRYPOINT ["bash", "/database.sh"]

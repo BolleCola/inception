@@ -12,7 +12,7 @@ DOCKER_DIR	= ${SRCS_DIR}docker-compose.yml
 NAME		= inception
 
 # COMMANDS
-DOCKER		=  docker compose -f ${DOCKER_DIR} --env-file ${ENV_FILE} -p ${NAME}
+DOCKER		= docker-compose -f ${DOCKER_DIR} --env-file ${ENV_FILE} -p ${NAME}
 
 all: up
 
@@ -22,8 +22,8 @@ up:
 
 build:
 	@echo "${GREEN}Building containers...${RESET}"
-	@mkdir -p /home/tpaquier/data/data
-	@mkdir -p /home/tpaquier/data/wordpress
+	@mkdir -p /home/tywael/data/data
+	@mkdir -p /home/tywael/data/wordpress
 	@${DOCKER} up -d --build
 
 down:
@@ -45,8 +45,8 @@ restart:
 delete:
 	@echo "${GREEN}Deleting containers...${RESET}"
 	@${DOCKER} down --volumes --remove-orphans
-	@rm -rf /home/tpaquier/data/data
-	@rm -rf /home/tpaquier/data/wordpress
+	@rm -rf /home/tywael/data/data
+	@rm -rf /home/tywael/data/wordpress
 	
 
 rebuild: delete

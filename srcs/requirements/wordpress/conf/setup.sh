@@ -20,4 +20,4 @@ wp user create "$WP_USER" "$WP_USER_EMAIL" --role=editor --user_pass="$WP_USER_P
 
 fi
 
-php-fpm7 --nodaemonize`
+php-fpm7 --nodaemonize

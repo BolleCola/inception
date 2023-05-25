@@ -55,10 +55,10 @@ volumes:
     driver_opts:
       type: "none"
       o: "bind"
-      device: "/home/tywael/data/data"
+      device: "/home/tpaquier/data/data"
   wpdata:
     driver: local
     driver_opts:
       type: "none"
       o: "bind"
-      device: "/home/tywael/data/wordpress"
+      device: "/home/tpaquier/data/wordpress"
